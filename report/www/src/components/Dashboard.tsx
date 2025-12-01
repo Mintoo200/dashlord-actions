@@ -325,30 +325,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ report }) => {
         renderCell: (params) => {
           if (!isToolEnabled("ecoindex", params.row.url))
             return <IconUnknown />;
-          let grade = "F";
-          let severity: AlertProps.Severity = "error";
           const value = params.row.summary[`lighthouse_accessibility`];
           if (!value) return <IconUnknown />;
 
-          if (value >= 1) {
-            grade = "A";
-            severity = "success";
-          } else if (value >= 0.85) {
-            grade = "C";
-            severity = "warning";
-          } else if (value >= 0.7) {
-            grade = "F";
-            severity = "error";
-          }
-
+          const grade = (value >= 1) ? "A" : "F";
           return (
             <GradeBadge
               title={`Voir les détails lighthouse pour l'url ${slugifyUrl(
                 params.row.url
               )}`}
               showCheckOnSuccess
+              showWarningOnError
               label={grade}
-              severity={severity}
               linkProps={{
                 href: `/url/${slugifyUrl(
                   params.row.url
